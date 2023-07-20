@@ -1,0 +1,15 @@
+C:\Users\aaron\OneDrive\Desktop\C SHARP PRACTICE\FirstApp\bin\Debug\net6.0\TerminatorSurvivor.exe
+C:\Users\aaron\OneDrive\Desktop\C SHARP PRACTICE\FirstApp\bin\Debug\net6.0\TerminatorSurvivor.deps.json
+C:\Users\aaron\OneDrive\Desktop\C SHARP PRACTICE\FirstApp\bin\Debug\net6.0\TerminatorSurvivor.runtimeconfig.json
+C:\Users\aaron\OneDrive\Desktop\C SHARP PRACTICE\FirstApp\bin\Debug\net6.0\TerminatorSurvivor.dll
+C:\Users\aaron\OneDrive\Desktop\C SHARP PRACTICE\FirstApp\bin\Debug\net6.0\TerminatorSurvivor.pdb
+C:\Users\aaron\OneDrive\Desktop\C SHARP PRACTICE\FirstApp\obj\Debug\net6.0\TerminatorSurvivor.csproj.AssemblyReference.cache
+C:\Users\aaron\OneDrive\Desktop\C SHARP PRACTICE\FirstApp\obj\Debug\net6.0\TerminatorSurvivor.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\aaron\OneDrive\Desktop\C SHARP PRACTICE\FirstApp\obj\Debug\net6.0\TerminatorSurvivor.AssemblyInfoInputs.cache
+C:\Users\aaron\OneDrive\Desktop\C SHARP PRACTICE\FirstApp\obj\Debug\net6.0\TerminatorSurvivor.AssemblyInfo.cs
+C:\Users\aaron\OneDrive\Desktop\C SHARP PRACTICE\FirstApp\obj\Debug\net6.0\TerminatorSurvivor.csproj.CoreCompileInputs.cache
+C:\Users\aaron\OneDrive\Desktop\C SHARP PRACTICE\FirstApp\obj\Debug\net6.0\TerminatorSurvivor.dll
+C:\Users\aaron\OneDrive\Desktop\C SHARP PRACTICE\FirstApp\obj\Debug\net6.0\refint\TerminatorSurvivor.dll
+C:\Users\aaron\OneDrive\Desktop\C SHARP PRACTICE\FirstApp\obj\Debug\net6.0\TerminatorSurvivor.pdb
+C:\Users\aaron\OneDrive\Desktop\C SHARP PRACTICE\FirstApp\obj\Debug\net6.0\TerminatorSurvivor.genruntimeconfig.cache
+C:\Users\aaron\OneDrive\Desktop\C SHARP PRACTICE\FirstApp\obj\Debug\net6.0\ref\TerminatorSurvivor.dll
