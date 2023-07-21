@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Data;
@@ -151,6 +151,7 @@ namespace TerminatorSurvivor
                 // GAME CYCLE
                 while (isJohnAlive && signalsActivated < 3)
                 {
+                    sweepDeadSoldiers();
                     if (alertTimer > 3)
                         alert = false;
                     
@@ -1594,10 +1595,10 @@ namespace TerminatorSurvivor
                 Console.WriteLine(map[johnLocation[0] + loc[0], johnLocation[1] + loc[1]].distantDesc);
                 map[johnLocation[0] + loc[0], johnLocation[1] + loc[1]].hasVisited = true;
 
-                if (map[johnLocation[0] + loc[0], johnLocation[1] + loc[1]].isT600)
+                if (map[johnLocation[0] + loc[0], johnLocation[1] + loc[1]].isT600 && map[johnLocation[0] + loc[0], johnLocation[1] + loc[1]].type != "Resistance Base")
                     Console.WriteLine("\nYou see enemy movement. T600s on patrol. You can expect a fight there.");
 
-                if (map[johnLocation[0] + loc[0], johnLocation[1] + loc[1]].isT800)
+                if (map[johnLocation[0] + loc[0], johnLocation[1] + loc[1]].isT800 && map[johnLocation[0] + loc[0], johnLocation[1] + loc[1]].type != "Resistance Base")
                     Console.WriteLine("\nYou see enemy movement. A T800 is tracking you. You'd do well to be cautious.");
 
                 string cont;
@@ -1803,7 +1804,7 @@ namespace TerminatorSurvivor
 
             if (location[0] > johnLocation[0] && location[1] < johnLocation[1])
             {
-                return "NORTH-WEST";
+                return "SOUTH-WEST";
             }
 
             return "INVALID LOCATION";
