@@ -15,6 +15,8 @@ namespace TerminatorSurvivor
 {
     class Program
     {
+        static int testGitPush = 0;
+        
         // Access all available text prompts
         static Text textRef = new Text();
 
