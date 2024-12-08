@@ -30,6 +30,9 @@ namespace TerminatorSurvivor
         // Environmental protection
         public double cover;
 
+        // Terminators should not appear in these zones
+        public string[] nullZones = { "Resistance Base", "HK-VTOL", "HK-TANK", "Harvester" };
+
         // For all random assignments and operations
         Random randNum = new Random();
 
@@ -61,7 +64,7 @@ namespace TerminatorSurvivor
                 case "HK-VTOL":
                     assignedDescs = descText.GetDescs("HK-VTOL");
                     break;
-                case "HK-Tank":
+                case "HK-TANK":
                     assignedDescs = descText.GetDescs("HK-TANK");
                     break;
                 case "Harvester":
@@ -76,8 +79,7 @@ namespace TerminatorSurvivor
             this.distantDesc = assignedDescs[0];
             this.closeDesc = assignedDescs[1];
 
-            // T-600 units only appear at certain locationsc
-            string[] nullZones = { "Resistance Base", "HK-VTOL", "HK-TANK", "Harvester" };
+            // T-600 units only appear at certain locations
             if (!nullZones.Contains(this.type))
             {
                 this.isT600 = randNum.Next(1, 11) > 3 ? true : false;

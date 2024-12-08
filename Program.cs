@@ -18,6 +18,9 @@ namespace TerminatorSurvivor
         // Access all available text prompts
         static Text textRef = new Text();
 
+        // Character limit per line in console
+        static int charLimit = 80;
+
         // For use in all random assignments
         static Random randInt = new Random();
 
@@ -53,12 +56,17 @@ namespace TerminatorSurvivor
         // For use in periodic updates from Resistance Bases to inform John of boss locations
         static int notifyTimer = 3;
 
+        // DEBUG MODE
+        static bool debugMode = true;
+
         static void Main(string[] args)
         {
             while (playAgain)
             {
                 playAgain = true;
                 isJohnAlive = true;
+                notifyTimer = 3;
+                healthPacks = 3;
                 soldiers.Clear();
                 Terminators.Clear();
                 
@@ -147,7 +155,8 @@ namespace TerminatorSurvivor
 
                 // Establish game map
                 Location[,] map = generateMap();
-                
+                placeT600s(map); // ERROR: INDEX OUT OF RANGE
+
                 // GAME CYCLE
                 while (isJohnAlive && signalsActivated < 3)
                 {
@@ -174,7 +183,7 @@ namespace TerminatorSurvivor
                     }
                     else if (playerChoice == "4" || playerChoice == "VIEW MAP")
                     {
-                        viewMap(map);
+                        viewMap(map, debugMode);
                     }
                     else if (playerChoice == "5" || playerChoice == "PARTY STATUS")
                     {
@@ -199,11 +208,13 @@ namespace TerminatorSurvivor
                 // If John Connor has died, failure. If three signals have been activated, Skynet is destroyed, success.
                 if (!isJohnAlive)
                 {
-                    Console.WriteLine(textRef.gameOver);
+                    // Console.WriteLine(textRef.gameOver);
+                    printLineLimit(textRef.gameOver, charLimit);
                 }
                 else if (signalsActivated == 3)
                 {
-                    Console.WriteLine(textRef.victory);
+                    // Console.WriteLine(textRef.victory);
+                    printLineLimit(textRef.victory, charLimit);
                 }
 
                 // Prompt to play again.
@@ -256,7 +267,19 @@ namespace TerminatorSurvivor
 
                 Console.WriteLine("████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ████████╗ ██████╗ ██████╗ \r\n╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗╚══██╔══╝██╔═══██╗██╔══██╗\r\n   ██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║███████║   ██║   ██║   ██║██████╔╝\r\n   ██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║██║██║╚██╗██║██╔══██║   ██║   ██║   ██║██╔══██╗\r\n   ██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║   ██║   ╚██████╔╝██║  ██║\r\n   ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝\r\n                                                                                   \r\n███████╗██╗   ██╗██████╗ ██╗   ██╗██╗██╗   ██╗ ██████╗ ██████╗                     \r\n██╔════╝██║   ██║██╔══██╗██║   ██║██║██║   ██║██╔═══██╗██╔══██╗                    \r\n███████╗██║   ██║██████╔╝██║   ██║██║██║   ██║██║   ██║██████╔╝                    \r\n╚════██║██║   ██║██╔══██╗╚██╗ ██╔╝██║╚██╗ ██╔╝██║   ██║██╔══██╗                    \r\n███████║╚██████╔╝██║  ██║ ╚████╔╝ ██║ ╚████╔╝ ╚██████╔╝██║  ██║                    \r\n╚══════╝ ╚═════╝ ╚═╝  ╚═╝  ╚═══╝  ╚═╝  ╚═══╝   ╚═════╝ ╚═╝  ╚═╝ ");
                 Console.WriteLine("\n*************************************************************************************\n");
-                Console.WriteLine($"{textRef.introduction}\n");
+                // Console.WriteLine($"{textRef.introduction}\n");
+                printLineLimit(textRef.introduction, charLimit);
+
+                //////////// TEST PRINT HERE ////////////////
+                //Location testLocation = new Location("Resistance Base", false, false);
+                //foreach(string zone in testLocation.nullZones)
+                //{
+                //    Console.WriteLine(zone);
+                //}
+                //Console.WriteLine(testLocation.nullZones.Contains(testLocation.type));
+                //////////// TEST PRINT HERE ////////////////
+
+
                 Console.Write("1) PLAY\n2) EXPLANATION\n3) QUIT\n\nENTER YOUR CHOICE: ");
 
                 selection = Console.ReadLine().ToUpper();
@@ -267,7 +290,8 @@ namespace TerminatorSurvivor
                     do
                     {
                         Console.Clear();
-                        Console.WriteLine(textRef.explanation);
+                        // Console.WriteLine(textRef.explanation);
+                        printLineLimit(textRef.explanation, charLimit);
                         Console.Write("\nTYPE 'X' TO CONTINUE: ");
 
                         cont = Console.ReadLine().ToUpper();
@@ -305,9 +329,10 @@ namespace TerminatorSurvivor
             do
             {
                 Console.Clear();
-                
+
                 // Give current area description
-                Console.WriteLine(map[johnLocation[0], johnLocation[1]].closeDesc);
+                // Console.WriteLine(map[johnLocation[0], johnLocation[1]].closeDesc);
+                printLineLimit(map[johnLocation[0], johnLocation[1]].closeDesc, charLimit);
 
                 // Notify player of T-800 alert status
                 if (alert)
@@ -390,7 +415,7 @@ namespace TerminatorSurvivor
 
             // Populate with boss areas
             areas.Add(new Location("HK-VTOL", false, false));
-            areas.Add(new Location("HK-Tank", false, false));
+            areas.Add(new Location("HK-TANK", false, false));
             areas.Add(new Location("Harvester", false, false));
 
             // Generate 10/10 2D array from areas list
@@ -427,7 +452,7 @@ namespace TerminatorSurvivor
         }
 
         // Display map and map legend
-        static void viewMap(Location[,] map)
+        static void viewMap(Location[,] map, bool isDebug)
         {
             Console.Clear();
             for (int i = 0; i < 10; i++)
@@ -460,7 +485,7 @@ namespace TerminatorSurvivor
                             case "HK-VTOL":
                                 Console.Write(" ▼ ");
                                 break;
-                            case "HK-Tank":
+                            case "HK-TANK":
                                 Console.Write(" ▼ ");
                                 break;
                             case "Harvester":
@@ -478,6 +503,110 @@ namespace TerminatorSurvivor
                 }
                 Console.WriteLine();
             }
+
+            // DEBUG TOOL: AREA TYPES
+            if (isDebug)
+            {
+                Console.WriteLine("\n\nAREA TYPES\n-------------------\n");
+                for (int i = 0; i < 10; i++)
+                {
+                    for (int j = 0; j < 10; j++)
+                    {
+                        if (map[i, j].isJohnConnor)
+                        {
+                            Console.Write(" █ ");
+                        }
+                        else
+                        {
+                            switch (map[i, j].type)
+                            {
+                                case "Wasteland":
+                                    Console.Write(" w ");
+                                    break;
+                                case "Bombed Building":
+                                    Console.Write(" b ");
+                                    break;
+                                case "Scrapyard":
+                                    Console.Write(" s ");
+                                    break;
+                                case "Ruined Hospital":
+                                    Console.Write(" h ");
+                                    break;
+                                case "Resistance Base":
+                                    Console.Write(" # ");
+                                    break;
+                                case "HK-VTOL":
+                                    Console.Write(" ▼ ");
+                                    break;
+                                case "HK-TANK":
+                                    Console.Write(" ▼ ");
+                                    break;
+                                case "Harvester":
+                                    Console.Write(" ▼ ");
+                                    break;
+                                default:
+                                    Console.Write(" ? ");
+                                    break;
+                            }
+                        }
+                    }
+                    Console.WriteLine();
+                }
+                Console.WriteLine();
+            }
+
+            // DEBUG TOOL: T-800 LOCATIONS
+            if (isDebug)
+            {
+                Console.WriteLine("\nT-800 LOCATIONS\n-------------------\n");
+                for (int i = 0; i < 10; i++)
+                {
+                    for (int j = 0; j < 10; j++)
+                    {
+                        if (map[i, j].isJohnConnor)
+                        {
+                            Console.Write(" █ ");
+                        }
+                        else if (map[i, j].isT800)
+                        {
+                            Console.Write(" T ");
+                        }
+                        else
+                        {
+                            Console.Write(" - ");
+                        }
+                    }
+                    Console.WriteLine();
+                }
+                Console.WriteLine();
+            }
+
+            // DEBUG TOOL: T-600 LOCATIONS
+            if (isDebug)
+            {
+                Console.WriteLine("\nT-600 LOCATIONS\n-------------------\n");
+                for (int i = 0; i < 10; i++)
+                {
+                    for (int j = 0; j < 10; j++)
+                    {
+                        if (map[i, j].isJohnConnor)
+                        {
+                            Console.Write(" █ ");
+                        }
+                        else if (map[i, j].isT600)
+                        {
+                            Console.Write(" t ");
+                        }
+                        else
+                        {
+                            Console.Write(" - ");
+                        }
+                    }
+                    Console.WriteLine();
+                }
+                Console.WriteLine();
+            }
+
             Console.Write("\n█ - John Connor\nw - Wasteland\nb - Bombed Building\ns - Scrapyard\nh - Ruined Hospital\n# - Resistance Base\n▼ - Boss\n");
 
             string exit;
@@ -607,6 +736,34 @@ namespace TerminatorSurvivor
             return new int[] { locY, locX };
         }
 
+        static void placeT600s(Location[,] map)
+        {
+            foreach (Location coord in map)
+            {
+                coord.isT600 = false;
+            }
+
+            int termPlaced = 0;
+
+            while (termPlaced < 15)
+            {
+                int[] loc = { 0, 0 };
+                do
+                {
+                    loc[0] = randInt.Next(10);
+                    loc[1] = randInt.Next(10);
+                } while (
+                    map[loc[0], loc[1]].isT600
+                    || map[loc[0], loc[1]].isT800
+                    || map[loc[0], loc[1]].isJohnConnor
+                    || map[loc[0], loc[1]].nullZones.Contains(map[loc[0], loc[1]].type) // TEST
+                );
+
+                map[loc[0], loc[1]].isT600 = true;
+                termPlaced++;
+            }
+        }
+
         // Collection T-800 patrol
         static void termPatrol(Location[,] map)
         {
@@ -657,10 +814,17 @@ namespace TerminatorSurvivor
             }
 
             // Reassign T-600 placement. Added to improve enemy encounter rate.
-            foreach (Location loc in map)
-            {
-                loc.isT600 = randInt.Next(1, 11) > 6 ? true : false;
-            }
+            //     ADDED FIX: T-600s will now no longer spawn in T-800 locations or at Resistance Bases
+            //     ADDED FIX: Reduce and limit number of active T-600s on each respawn
+
+            // foreach (Location loc in map)
+            // {
+            // loc.isT600 = randInt.Next(1, 11) > 6 && loc.isT800 == false ? true : false;
+            // }
+            // }
+
+            // Place T600s here
+            placeT600s(map);
         }
 
         // Turn-based combat
@@ -788,8 +952,16 @@ namespace TerminatorSurvivor
                         
                         string[] newDescs = textRef.GetDescs("Wasteland");
 
+                        // TESTING AREA TYPE CHANGE
+                        // Console.Write($"\n\nProgram.cs LINE 796 TEST, RESETTING AREA TYPE: {map[johnLocation[0], johnLocation[1]].type}");
+                        // TESTING
+
                         map[johnLocation[0], johnLocation[1]].distantDesc = newDescs[0];
                         map[johnLocation[0], johnLocation[1]].closeDesc = newDescs[1];
+
+                        // TESTING AREA TYPE CHANGE
+                        // Console.Write($"\nProgram.cs LINE 803 TEST, NEW AREA TYPE: {map[johnLocation[0], johnLocation[1]].type}\n\n");
+                        // TESTING
 
                         string cont2;
                         do
@@ -1454,6 +1626,7 @@ namespace TerminatorSurvivor
 
         // Move John and his party to a nearby location
         static void move(Location[,] map)
+        
         {
             Console.Clear();
             Console.WriteLine("MOVING OUT...\n");
@@ -1578,11 +1751,13 @@ namespace TerminatorSurvivor
         }
 
         // Verify and describe the location in a specified direction
+        
         static void checkDirection(int[] loc, Location[,] map)
         {
             if (johnLocation[0] + loc[0] < 0 || johnLocation[0] + loc[0] >= map.GetLength(0) || johnLocation[1] + loc[1] < 0 || johnLocation[1] + loc[1] >= map.GetLength(1))
             {
-                Console.WriteLine(textRef.noScout);
+                // Console.WriteLine(textRef.noScout);
+                printLineLimit(textRef.noScout, charLimit);
                 Console.Write("\nTYPE 'X' TO CONTINUE: ");
                 string cont;
                 do
@@ -1592,7 +1767,8 @@ namespace TerminatorSurvivor
             }
             else
             {
-                Console.WriteLine(map[johnLocation[0] + loc[0], johnLocation[1] + loc[1]].distantDesc);
+                // Console.Write(map[johnLocation[0] + loc[0], johnLocation[1] + loc[1]].distantDesc);
+                printLineLimit(map[johnLocation[0] + loc[0], johnLocation[1] + loc[1]].distantDesc, charLimit);
                 map[johnLocation[0] + loc[0], johnLocation[1] + loc[1]].hasVisited = true;
 
                 if (map[johnLocation[0] + loc[0], johnLocation[1] + loc[1]].isT600 && map[johnLocation[0] + loc[0], johnLocation[1] + loc[1]].type != "Resistance Base")
@@ -1637,7 +1813,7 @@ namespace TerminatorSurvivor
                     combat(map, false);
 
                 // Introduce and combat encountered boss
-                if (map[johnLocation[0], johnLocation[1]].type == "HK-VTOL" || map[johnLocation[0], johnLocation[1]].type == "HK-Tank" || map[johnLocation[0], johnLocation[1]].type == "Harvester")
+                if (map[johnLocation[0], johnLocation[1]].type == "HK-VTOL" || map[johnLocation[0], johnLocation[1]].type == "HK-TANK" || map[johnLocation[0], johnLocation[1]].type == "Harvester")
                 {
                     string cont = "";
                     do
@@ -1808,6 +1984,39 @@ namespace TerminatorSurvivor
             }
 
             return "INVALID LOCATION";
+        }
+
+        // Print multi-line string without word splitting on new line
+        static void printLineLimit(string text, int limit)
+        {
+            // Paragraph and title breaks
+            String[] paragraphs = text.Split("@split");
+            foreach (String paragraph in paragraphs)
+            {
+                String[] textWords = paragraph.Split(' ');
+                int charCount = 0;
+                String newText = "";
+
+                foreach (String word in textWords)
+                {
+                    if (word[word.Length - 1] == '\n')
+                    {
+                        charCount = 0;
+                    }
+
+                    if (charCount + word.Length > limit)
+                    {
+                        newText += '\n';
+                        charCount = 0;
+                    }
+
+                    newText += word;
+                    newText += (Array.IndexOf(textWords, word) > textWords.Length - 1 ? "" : " ");
+                    charCount += word.Length;
+                }
+
+                Console.WriteLine(newText);
+            }
         }
     }
 }

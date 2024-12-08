@@ -46,7 +46,7 @@ namespace TerminatorSurvivor
             else
             {
                 int isTerm = randNum.Next(1, 10);
-                this.isTerminator = isTerm > 7 ? true : false;
+                this.isTerminator = isTerm > 5 ? true : false;
             }
             
         }
